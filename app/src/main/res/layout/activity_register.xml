@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:padding="20dp"
     android:gravity="center"
-    tools:context="com.example.ssengel.loginapp01.RegisterActivity">
+    tools:context="com.example.ssengel.loginapp01.Activity.RegisterActivity">
 
     <EditText
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.example.ssengel.loginapp01;
+package com.example.ssengel.loginapp01.Model;
 
 /**
  * Created by ssengel on 01.04.2018.

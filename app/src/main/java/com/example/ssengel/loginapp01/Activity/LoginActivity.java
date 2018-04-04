@@ -1,4 +1,4 @@
-package com.example.ssengel.loginapp01;
+package com.example.ssengel.loginapp01.Activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +14,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.ssengel.loginapp01.Constant.ServerURL;
+import com.example.ssengel.loginapp01.R;
+import com.example.ssengel.loginapp01.Model.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView lnkRegister;
 
     private final static String TAG  = LoginActivity.class.getName();
-    private final static User USER = new User();
+    public final static User USER = new User();
 
     private RequestQueue requestQueue;
 
@@ -75,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         jsonParam.put("userName",userName);
         jsonParam.put("password",password);
 
-        JsonObjectRequest req = new JsonObjectRequest(Const.URL+"login", jsonParam, new Response.Listener<JSONObject>() {
+        JsonObjectRequest req = new JsonObjectRequest(ServerURL.LOGIN, jsonParam, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 
