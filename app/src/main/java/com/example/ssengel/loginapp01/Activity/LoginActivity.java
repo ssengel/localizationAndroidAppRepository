@@ -93,7 +93,8 @@ public class LoginActivity extends AppCompatActivity {
                         USER.setLastName(response.getString("lastName"));
                         Log.i(TAG, "GIRIS BASARILI..");
 
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
                         LoginActivity.this.startActivity(intent);
                         
                     }
