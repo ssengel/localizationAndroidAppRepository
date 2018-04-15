@@ -1,6 +1,14 @@
 package com.example.ssengel.loginapp01.Activity;
 
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -25,6 +34,8 @@ import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private BluetoothManager btManager;
+
     private Button btnLogin;
     private EditText txtUserName;
     private EditText txtPassword;
@@ -37,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void initVar(){
+        btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         txtUserName = (EditText) findViewById(R.id.txtUserName);
         txtPassword = (EditText) findViewById(R.id.txtPassword);
@@ -126,5 +138,34 @@ public class LoginActivity extends AppCompatActivity {
 
         initVar();
         initListeners();
+
+        checkPermissions();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void checkPermissions() {
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, "BLE Not Supported",
+                    Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        if (btManager.getAdapter() != null && !btManager.getAdapter().isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, 1);
+        }
+
+
+        //konum kontrolu
+        if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
+                Toast.makeText(this, "Ble konum verilerini almak icin konum izni gerekli..", Toast.LENGTH_SHORT).show();
+            }else{
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
+        }else{
+            Toast.makeText(this, "Konum izni zaten verildi.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

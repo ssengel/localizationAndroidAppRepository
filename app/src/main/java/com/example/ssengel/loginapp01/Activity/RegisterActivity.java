@@ -91,9 +91,10 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 //Yazi RENGI YESIL OLMALI
-                txtStatus.setText("GIRIS BASARALI.. Email`inize dogrulama kodu gonderilmistir");
+
                 try {
-                    Thread.sleep(3000);
+                    txtStatus.setText("GIRIS BASARALI.. Email`inize dogrulama kodu gonderilmistir");
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 };

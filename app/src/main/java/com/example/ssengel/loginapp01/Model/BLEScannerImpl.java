@@ -39,7 +39,7 @@ public class BLEScannerImpl implements BLEScanner {
     private BluetoothAdapter btAdapter;
     private BluetoothLeScanner btScanner;
     private List<ScanFilter> scanFilters;
-    private String beaconNames[]={"BLE_02","BLE_03","WGX_iBeacon","BLE_01","BLE"};
+    private String beaconNames[]={"DBMBLE0","DBMBLE1","DBMBLE2","DBMBLE3","DBMBLE4","DBMBLE5","DBMBLE6","DBMBLE7","DBMBLE8"};
     final Comparator com;
     private RequestQueue mRequestQueue;
     public BLEScannerImpl(BluetoothManager btManager, Context context){
@@ -185,7 +185,7 @@ public class BLEScannerImpl implements BLEScanner {
         jsonParam.put("userId", userId);
         jsonParam.put("beacons", beacons );
 
-        Log.i("JSON", jsonParam.toString());
+
 //
 //        JsonObjectRequest req = new JsonObjectRequest(url, jsonParam, new Response.Listener<JSONObject>() {
 //            @Override
@@ -211,7 +211,7 @@ public class BLEScannerImpl implements BLEScanner {
         os.close();
 
         Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-        Log.i("MSG" , conn.getResponseMessage());
+
 
         conn.disconnect();
     }

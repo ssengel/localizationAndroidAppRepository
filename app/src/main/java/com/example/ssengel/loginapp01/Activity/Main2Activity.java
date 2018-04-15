@@ -1,9 +1,17 @@
 package com.example.ssengel.loginapp01.Activity;
 
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,8 +24,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.ssengel.loginapp01.Adapter.DiscountAdapter;
+import com.example.ssengel.loginapp01.Constant.ServerURL;
+import com.example.ssengel.loginapp01.Model.BLEScannerImpl;
 import com.example.ssengel.loginapp01.Model.GeneralDiscount;
 import com.example.ssengel.loginapp01.R;
 
@@ -31,7 +42,14 @@ public class Main2Activity extends AppCompatActivity
     private DiscountAdapter discountAdapter;
     private List<GeneralDiscount> discountList;
 
+    private BluetoothManager btManager;
+    private BLEScannerImpl mBLEScannerImpl;
+
     private void init(){
+
+        btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBLEScannerImpl = new BLEScannerImpl(btManager, this);
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGeneralDiscount);
         discountList = new ArrayList<>();
         discountAdapter = new DiscountAdapter(this,discountList);
@@ -68,6 +86,9 @@ public class Main2Activity extends AppCompatActivity
 
         init();
 
+
+        mBLEScannerImpl.scanLeDevice("FAST");
+        mBLEScannerImpl.updatelistRssi(ServerURL.BEACONFRAMES,LoginActivity.USER.getId());
 
     }
 
@@ -122,4 +143,6 @@ public class Main2Activity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
