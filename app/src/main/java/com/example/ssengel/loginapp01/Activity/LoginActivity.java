@@ -18,11 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.ssengel.loginapp01.Auth.AuthController;
 import com.example.ssengel.loginapp01.Constant.ServerURL;
 import com.example.ssengel.loginapp01.R;
 import com.example.ssengel.loginapp01.Model.User;
@@ -30,6 +32,8 @@ import com.example.ssengel.loginapp01.Model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -96,26 +100,26 @@ public class LoginActivity extends AppCompatActivity {
 
                 try {
 
-                    if(!response.getBoolean("status")){
-                        Log.i(TAG, "Null geldi");
-                    }else {
+                    if (!response.getBoolean("auth")) {
+                        Log.i(TAG, response.toString());
+                    } else {
+                        //get token
+                        AuthController.TOKEN = response.getString("token");
 
-                        USER.setId(response.getString("_id"));
-                        USER.setName(response.getString("name"));
-                        USER.setLastName(response.getString("lastName"));
+                        USER.setId(response.getString("userId"));
                         Log.i(TAG, "GIRIS BASARILI..");
+                        Log.w(TAG, AuthController.TOKEN);
+                        //Log.w(TAG, USER.getId());
 
                         //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
                         LoginActivity.this.startActivity(intent);
-                        
+
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
 
 
             }
@@ -125,6 +129,18 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, error.getMessage());
             }
         });
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                String bearer = "Bearer ".concat(token);
+//                Map<String, String> headersSys = super.getHeaders();
+//                Map<String, String> headers = new HashMap<String, String>();
+//                headersSys.remove("Authorization");
+//                headers.put("Authorization", bearer);
+//                headers.putAll(headersSys);
+//                return headers;
+//            }
+//        };
 
         requestQueue.add(req);
 

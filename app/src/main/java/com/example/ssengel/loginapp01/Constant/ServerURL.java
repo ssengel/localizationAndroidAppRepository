@@ -5,10 +5,9 @@ package com.example.ssengel.loginapp01.Constant;
  */
 
 public class ServerURL {
-    static final String root = "http://192.168.43.96:8080";
+    static final String root = "http://176.240.229.56:8080";
 
-    public final static String BEACONFRAMES= root+"/beaconframes";
-    public final static String LOGIN= root+"/user/login";
-    public final static String REGISTER= root+"/user";
-
+    public final static String BEACONFRAMES= root+"/beaconframe";
+    public final static String LOGIN= root+"/auth/user/login";
+    public final static String REGISTER= root+"/auth/user/register";
 }

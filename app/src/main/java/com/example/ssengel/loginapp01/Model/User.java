@@ -14,7 +14,6 @@ public class User {
     private String name;
     private String lastName;
     private String email;
-    private int age;
     private String recordTime;
 
     public User(){
@@ -24,18 +23,17 @@ public class User {
         this.name = null;
         this.lastName = null;
         this.email = null;
-        this.age = 0;
         this.recordTime = null;
     }
 
-    public User(String id, String userName, String password, String name, String lastName, String email, int age, String recordTime) {
+    public User(String id, String userName, String password, String name, String lastName, String email, String recordTime) {
         this.id = id;
         this.userName = userName;
         this.password = password;
         this.name = name;
         this.lastName = lastName;
         this.email = email;
-        this.age = age;
+
         this.recordTime = recordTime;
     }
 
@@ -87,14 +85,6 @@ public class User {
         this.email = email;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
     public String getRecordTime() {
         return recordTime;
     }
@@ -112,7 +102,6 @@ public class User {
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", age=" + age +
                 ", recordTime='" + recordTime + '\'' +
                 '}';
     }

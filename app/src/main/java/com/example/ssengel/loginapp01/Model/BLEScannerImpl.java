@@ -11,6 +11,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.ssengel.loginapp01.Activity.LoginActivity;
 import com.example.ssengel.loginapp01.Constant.ServerURL;
@@ -34,6 +37,7 @@ public class BLEScannerImpl implements BLEScanner {
 
     private ScanCallback scanCallback;
     private ArrayList<BeaconImpl> lstScanResults;
+    private ArrayList<BeaconImpl> tempLstScanResults;
     private ScanSettings lowScanSettings;
     private ScanSettings fastScanSettings;
     private BluetoothAdapter btAdapter;
@@ -46,6 +50,7 @@ public class BLEScannerImpl implements BLEScanner {
         mRequestQueue= Volley.newRequestQueue(context);
 
         lstScanResults = new ArrayList<>();
+        tempLstScanResults = new ArrayList<>();
         btAdapter = btManager.getAdapter();
         btScanner = btAdapter.getBluetoothLeScanner();
         lowScanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
@@ -106,24 +111,48 @@ public class BLEScannerImpl implements BLEScanner {
         return position;
     }
 
+    public int getPositionInTemp(String adress) {
+        int position = -1;
+
+        for (int i = 0; i < tempLstScanResults.size(); i++){
+            if (tempLstScanResults.get(i).getMacAddress().equals(adress)){
+                position=i;
+                break;
+            }
+        }
+        return position;
+    }
+
     @Override
     public void addBeacon(ScanResult scanResult) {
+
         int existingPosition = getPosition(scanResult.getDevice().getAddress());
 
         if (existingPosition > -1){
+
             lstScanResults.get(existingPosition).setRssi(scanResult.getRssi());
         }
         else {
-            BeaconImpl mBeaconImpl = new BeaconImpl(
-                    scanResult.getDevice().getName(),
-                    scanResult.getDevice().getAddress(),
-                    scanResult.getRssi(),
-                    -60,
-                    new KalmanFilter()
-            );
-            lstScanResults.add(mBeaconImpl);
+
+            existingPosition = getPositionInTemp(scanResult.getDevice().getAddress());
+            if (existingPosition > -1){
+                tempLstScanResults.get(existingPosition).setRssi(scanResult.getRssi());
+                lstScanResults.add(tempLstScanResults.get(existingPosition));
+            }
+            else{
+
+                BeaconImpl mBeaconImpl = new BeaconImpl(
+                        scanResult.getDevice().getName(),
+                        scanResult.getDevice().getAddress(),
+                        scanResult.getRssi(),
+                        -60,
+                        new KalmanFilter()
+                );
+                lstScanResults.add(0,mBeaconImpl);
+            }
         }
     }
+
 
     @Override
     public void updatelistRssi(final String  url,final String userId) {
@@ -132,7 +161,7 @@ public class BLEScannerImpl implements BLEScanner {
             public void run() {
                 while (true){
                     try {
-                        Thread.sleep(1000);                             //Threadi 1 saniye bekler
+                        Thread.sleep(2000);                             //Threadi 1 saniye bekler
                         Collections.sort(lstScanResults,com);            //Rssi büyükten küçüğe sıralar ..
                         if(lstScanResults.size() > 0)
                             try {
@@ -140,7 +169,8 @@ public class BLEScannerImpl implements BLEScanner {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                        lstScanResults.clear();
+                        tempLstScanResults = lstScanResults;
+                        lstScanResults = new ArrayList<>();
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -159,15 +189,6 @@ public class BLEScannerImpl implements BLEScanner {
 
     // Beacon post işlemi
     void BluetoothPosting(String ServerUrl,String userId) throws JSONException, IOException {
-//        String url ="http://192.168.0.35:3000/beaconFrames";
-
-        URL url =new URL(ServerUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-        conn.setRequestProperty("Accept","application/json");
-        conn.setDoOutput(true);
-        conn.setDoInput(true);
 
         JSONArray beacons  = new JSONArray();
         int length=lstScanResults.size();
@@ -183,37 +204,27 @@ public class BLEScannerImpl implements BLEScanner {
         }
         JSONObject jsonParam = new JSONObject();
         jsonParam.put("userId", userId);
+        jsonParam.put("storeId", 333);
         jsonParam.put("beacons", beacons );
 
 
 //
-//        JsonObjectRequest req = new JsonObjectRequest(url, jsonParam, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                Log.i("JSON", response.toString());
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.i("JSON", error.toString());
-//            }
-//        });
-//
-//        mRequestQueue.add(req);
+        JsonObjectRequest req = new JsonObjectRequest(ServerUrl, jsonParam, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("JSON", response.toString());
 
-        Log.i("JSON", jsonParam.toString());
-        DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-        //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
-        os.writeBytes(jsonParam.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("JSON", error.toString());
+            }
+        });
 
-        os.flush();
-        os.close();
-
-        Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+        mRequestQueue.add(req);
 
 
-        conn.disconnect();
     }
 
 }

@@ -51,17 +51,15 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void initListeners(){
 
-
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Log.e(TAG, "onClick: " );
+                Log.e(TAG, "btnRegister Click" );
 
                 User user = new User();
                 user.setName(txtName.getText().toString());
                 user.setLastName(txtLastName.getText().toString());
-                user.setAge(Integer.parseInt(txtAge.getText().toString()));
                 user.setEmail(txtEmail.getText().toString());
                 user.setUserName(txtUserName.getText().toString());
                 user.setPassword(txtPassword.getText().toString());
@@ -76,12 +74,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerUser(User user) throws JSONException {
 
-        Log.e(TAG, "onClick:2 " );
+        Log.e(TAG, "registerUser !! " );
 
         JSONObject jsonParam = new JSONObject();
         jsonParam.put("name",user.getName());
         jsonParam.put("lastName",user.getLastName());
-        jsonParam.put("age",user.getAge());
         jsonParam.put("email",user.getEmail());
         jsonParam.put("userName",user.getUserName());
         jsonParam.put("password",user.getPassword());
@@ -94,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 try {
                     txtStatus.setText("GIRIS BASARALI.. Email`inize dogrulama kodu gonderilmistir");
-                    Thread.sleep(1500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 };
