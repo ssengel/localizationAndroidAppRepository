@@ -66,9 +66,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String userName = txtUserName.getText().toString();
                 String password = txtPassword.getText().toString();
-
                 try {
-                    checkAccount(userName, password,"789789789");
+                    checkAccount(userName, password);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -88,7 +87,21 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void checkAccount(final String userName, String password, String deviceId) throws IOException, JSONException {
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        initVar();
+        initListeners();
+
+        checkPermissions();
+    }
+    // Kullanici Giris Kontrolu
+    private void checkAccount(String userName, String password) throws IOException, JSONException {
 
         JSONObject jsonParam = new JSONObject();
         jsonParam.put("userName",userName);
@@ -105,13 +118,18 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         //get token
                         AuthController.TOKEN = response.getString("token");
+                        JSONObject user = response.getJSONObject("user");
+                        USER.setId(user.getString("_id"));
+                        USER.setName(user.getString("name"));
+                        USER.setLastName(user.getString("lastName"));
+                        USER.setUserName(user.getString("userName"));
+                        USER.setEmail(user.getString("email"));
+                        USER.setStoreId("5addc203ab75782870a7cc14");
+                        USER.setCompanyId("5addbc06aa4d52265447025e");
 
-                        USER.setId(response.getString("userId"));
                         Log.i(TAG, "GIRIS BASARILI..");
-                        Log.w(TAG, AuthController.TOKEN);
-                        //Log.w(TAG, USER.getId());
+                        Log.i(TAG, "Main 2 ye YONLENDIRILIYOR..");
 
-                        //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
                         LoginActivity.this.startActivity(intent);
 
@@ -145,19 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue.add(req);
 
     }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        initVar();
-        initListeners();
-
-        checkPermissions();
-    }
-
+    // Izinler
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void checkPermissions() {
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {

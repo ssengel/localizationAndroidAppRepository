@@ -1,15 +1,11 @@
 package com.example.ssengel.loginapp01.Activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -23,7 +19,6 @@ import android.widget.Toast;
 
 import com.example.ssengel.loginapp01.Constant.ServerURL;
 import com.example.ssengel.loginapp01.Model.BLEScannerImpl;
-import com.example.ssengel.loginapp01.Model.User;
 import com.example.ssengel.loginapp01.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -117,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         //degisken ve view atamalari
         initViews();
         initListeners();
-        mBLEScannerImpl.updatelistRssi(ServerURL.BEACONFRAMES,LoginActivity.USER.getId());
+        mBLEScannerImpl.updatelistRssi();
 
     }
 }

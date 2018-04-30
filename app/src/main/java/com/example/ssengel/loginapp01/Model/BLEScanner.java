@@ -13,7 +13,6 @@ public interface BLEScanner {
     void scanLeDevice(String option);
     int getPosition(String adress);
     void addBeacon(ScanResult scanResult);
-    void updatelistRssi(String url,String userId);
-    List <BeaconImpl> getListScanResult();
+    void updatelistRssi();
 
 }

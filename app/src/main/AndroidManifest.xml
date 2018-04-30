@@ -14,12 +14,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon01"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.LoginActivity" android:label="BLE Project v3.0">
+        <activity
+            android:name=".Activity.LoginActivity"
+            android:label="BLE v5.0">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +36,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.ProfileActivity"
-            android:label="Profilim"></activity>
+            android:label="Profilim" />
+        <activity android:name=".Activity.NotificationActivity"></activity>
     </application>
 
 </manifest>

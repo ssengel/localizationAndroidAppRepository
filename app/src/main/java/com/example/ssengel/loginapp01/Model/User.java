@@ -9,6 +9,8 @@ package com.example.ssengel.loginapp01.Model;
 public class User {
 
     private String id;
+    private String companyId;
+    private String storeId;
     private String userName;
     private String password;
     private String name;
@@ -18,6 +20,8 @@ public class User {
 
     public User(){
         this.id = null;
+        this.companyId = null;
+        this.storeId = null;
         this.userName = null;
         this.password = null;
         this.name = null;
@@ -26,8 +30,10 @@ public class User {
         this.recordTime = null;
     }
 
-    public User(String id, String userName, String password, String name, String lastName, String email, String recordTime) {
+    public User(String id, String companyId,String storeId, String userName, String password, String name, String lastName, String email, String recordTime) {
         this.id = id;
+        this.storeId = storeId;
+        this.companyId = companyId;
         this.userName = userName;
         this.password = password;
         this.name = name;
@@ -37,12 +43,30 @@ public class User {
         this.recordTime = recordTime;
     }
 
+
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
     public String getUserName() {
@@ -97,6 +121,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
+                ", companyId='" + companyId + '\'' +
+                ", storeId='" + storeId + '\'' +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +

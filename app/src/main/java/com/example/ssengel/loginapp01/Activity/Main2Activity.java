@@ -1,62 +1,64 @@
 package com.example.ssengel.loginapp01.Activity;
 
-import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
+
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
+
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.ssengel.loginapp01.Adapter.DiscountAdapter;
+import com.example.ssengel.loginapp01.Common.StoreInfo;
 import com.example.ssengel.loginapp01.Constant.ServerURL;
 import com.example.ssengel.loginapp01.Model.BLEScannerImpl;
 import com.example.ssengel.loginapp01.Model.GeneralDiscount;
+import com.example.ssengel.loginapp01.Model.NotificationHelper;
 import com.example.ssengel.loginapp01.R;
+import com.example.ssengel.loginapp01.Service.ServiceNotifications;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
     private RecyclerView recyclerView;
     private DiscountAdapter discountAdapter;
     private List<GeneralDiscount> discountList;
-
     private BluetoothManager btManager;
     private BLEScannerImpl mBLEScannerImpl;
+    private ServiceNotifications serviceNotifications;
 
     private void init(){
 
+        serviceNotifications = new ServiceNotifications(this);
         btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBLEScannerImpl = new BLEScannerImpl(btManager, this);
-
+        //notiHelper = new NotificationHelper(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGeneralDiscount);
         discountList = new ArrayList<>();
         discountAdapter = new DiscountAdapter(this,discountList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(discountAdapter);
-        for (int i= 1 ;i < 10; i++){
+
+        for (int i= 1 ;i < 5; i++){
             GeneralDiscount discount = new GeneralDiscount();
             discount.setTag("Boyner Magazalarinda Indirim");
             discount.setPrice( 50);
@@ -64,7 +66,6 @@ public class Main2Activity extends AppCompatActivity
             discount.toString();
             discountList.add(discount);
         }
-
 
     }
 
@@ -86,11 +87,20 @@ public class Main2Activity extends AppCompatActivity
 
         init();
 
+        // Magazaya ait bildirimleri getir
+        StoreInfo.MAP_NOTIFICATIONS = serviceNotifications.getNotifications();
 
+        Log.e("Notification Service",serviceNotifications.getNotifications().toString());
+        Log.e("StoreInfo",StoreInfo.MAP_NOTIFICATIONS.toString());
+
+        //kullanicinin ilgilerinin getir.
+
+        //Taramayi baslat
         mBLEScannerImpl.scanLeDevice("FAST");
-        mBLEScannerImpl.updatelistRssi(ServerURL.BEACONFRAMES,LoginActivity.USER.getId());
+        mBLEScannerImpl.updatelistRssi();
 
     }
+
 
     @Override
     public void onBackPressed() {

@@ -8,6 +8,7 @@ import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -17,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.ssengel.loginapp01.Activity.LoginActivity;
 import com.example.ssengel.loginapp01.Constant.ServerURL;
+import com.example.ssengel.loginapp01.Service.ServiceBeaconFrames;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,11 +32,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
+import java.util.Random;
 
 
 public class BLEScannerImpl implements BLEScanner {
-
+    private ServiceBeaconFrames serviceBeaconFrames;
     private ScanCallback scanCallback;
     private ArrayList<BeaconImpl> lstScanResults;
     private ArrayList<BeaconImpl> tempLstScanResults;
@@ -45,10 +47,10 @@ public class BLEScannerImpl implements BLEScanner {
     private List<ScanFilter> scanFilters;
     private String beaconNames[]={"DBMBLE0","DBMBLE1","DBMBLE2","DBMBLE3","DBMBLE4","DBMBLE5","DBMBLE6","DBMBLE7","DBMBLE8"};
     final Comparator com;
-    private RequestQueue mRequestQueue;
-    public BLEScannerImpl(BluetoothManager btManager, Context context){
-        mRequestQueue= Volley.newRequestQueue(context);
 
+    public BLEScannerImpl(BluetoothManager btManager, Context context){
+
+        serviceBeaconFrames = new ServiceBeaconFrames(context);
         lstScanResults = new ArrayList<>();
         tempLstScanResults = new ArrayList<>();
         btAdapter = btManager.getAdapter();
@@ -67,7 +69,6 @@ public class BLEScannerImpl implements BLEScanner {
                         addBeacon(result);
                     }
                 }
-
             }
         };
 
@@ -155,23 +156,19 @@ public class BLEScannerImpl implements BLEScanner {
 
 
     @Override
-    public void updatelistRssi(final String  url,final String userId) {
+    public void updatelistRssi() {
         new Thread (new Runnable() {
             @Override
             public void run() {
                 while (true){
                     try {
-                        Thread.sleep(2000);                             //Threadi 1 saniye bekler
-                        Collections.sort(lstScanResults,com);            //Rssi büyükten küçüğe sıralar ..
-                        if(lstScanResults.size() > 0)
-                            try {
-                                BluetoothPosting(url,userId);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        tempLstScanResults = lstScanResults;
-                        lstScanResults = new ArrayList<>();
-
+                        Thread.sleep(1500);
+//                        if(lstScanResults.size() > 0){
+                            Collections.sort(lstScanResults,com);
+                            serviceBeaconFrames.postBeaconFrame(lstScanResults);
+                            tempLstScanResults = lstScanResults;
+                            lstScanResults = new ArrayList<>();
+//                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
@@ -180,51 +177,6 @@ public class BLEScannerImpl implements BLEScanner {
                 }
             }
         }).start();
-    }
-
-    @Override
-    public List<BeaconImpl> getListScanResult() {
-        return lstScanResults;
-    }
-
-    // Beacon post işlemi
-    void BluetoothPosting(String ServerUrl,String userId) throws JSONException, IOException {
-
-        JSONArray beacons  = new JSONArray();
-        int length=lstScanResults.size();
-        if(length>= 5){
-            length=5;
-        }
-        for(int i=0; i<length ;i++){
-            JSONObject beacon= new JSONObject();
-            beacon.put("macAddress", lstScanResults.get(i).getMacAddress() );
-            beacon.put("name", lstScanResults.get(i).getBeaconName());
-            beacon.put("rssi", (int)lstScanResults.get(i).getRssi());
-            beacons.put(beacon) ;
-        }
-        JSONObject jsonParam = new JSONObject();
-        jsonParam.put("userId", userId);
-        jsonParam.put("storeId", 333);
-        jsonParam.put("beacons", beacons );
-
-
-//
-        JsonObjectRequest req = new JsonObjectRequest(ServerUrl, jsonParam, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i("JSON", response.toString());
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("JSON", error.toString());
-            }
-        });
-
-        mRequestQueue.add(req);
-
-
     }
 
 }
