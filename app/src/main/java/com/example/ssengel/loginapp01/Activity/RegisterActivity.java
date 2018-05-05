@@ -83,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
         jsonParam.put("userName",user.getUserName());
         jsonParam.put("password",user.getPassword());
 
-
+        Log.e(TAG, ServerURL.REGISTER );
         JsonObjectRequest req = new JsonObjectRequest(ServerURL.REGISTER, jsonParam, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

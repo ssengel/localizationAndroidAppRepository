@@ -163,12 +163,12 @@ public class BLEScannerImpl implements BLEScanner {
                 while (true){
                     try {
                         Thread.sleep(1500);
-//                        if(lstScanResults.size() > 0){
+                        if(lstScanResults.size() > 0){
                             Collections.sort(lstScanResults,com);
                             serviceBeaconFrames.postBeaconFrame(lstScanResults);
                             tempLstScanResults = lstScanResults;
                             lstScanResults = new ArrayList<>();
-//                        }
+                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {

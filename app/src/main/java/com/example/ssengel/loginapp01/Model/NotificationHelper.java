@@ -11,7 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 
-import com.example.ssengel.loginapp01.Activity.Main2Activity;
+import com.example.ssengel.loginapp01.Activity.MainActivity;
 import com.example.ssengel.loginapp01.Activity.NotificationActivity;
 import com.example.ssengel.loginapp01.R;
 
@@ -56,7 +56,7 @@ public class NotificationHelper extends ContextWrapper {
         Intent targetIntent = new Intent(this, NotificationActivity.class);
 
         TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
-        taskStackBuilder.addParentStack(Main2Activity.class);
+        taskStackBuilder.addParentStack(MainActivity.class);
         taskStackBuilder.addNextIntent(targetIntent);
 
         PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

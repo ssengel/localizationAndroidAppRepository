@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -32,8 +31,6 @@ import com.example.ssengel.loginapp01.Model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -52,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void initVar(){
-        btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        //btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         txtUserName = (EditText) findViewById(R.id.txtUserName);
         txtPassword = (EditText) findViewById(R.id.txtPassword);
@@ -98,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         initVar();
         initListeners();
 
-        checkPermissions();
+        //checkPermissions();
     }
     // Kullanici Giris Kontrolu
     private void checkAccount(String userName, String password) throws IOException, JSONException {
@@ -130,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.i(TAG, "GIRIS BASARILI..");
                         Log.i(TAG, "Main 2 ye YONLENDIRILIYOR..");
 
-                        Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         LoginActivity.this.startActivity(intent);
 
                     }
