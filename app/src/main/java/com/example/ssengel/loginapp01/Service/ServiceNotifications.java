@@ -11,6 +11,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.ssengel.loginapp01.Activity.LoginActivity;
 import com.example.ssengel.loginapp01.Common.StoreInfo;
+import com.example.ssengel.loginapp01.Common.UserInfo;
 import com.example.ssengel.loginapp01.Constant.ServerURL;
 import com.example.ssengel.loginapp01.Model.Notification;
 
@@ -45,7 +46,7 @@ public class ServiceNotifications {
 
     private void getNotificationsFromServer(){
 
-        String url = ServerURL.NOTIFICATIONS+"?storeId="+LoginActivity.USER.getStoreId();
+        String url = ServerURL.NOTIFICATIONS+"?storeId="+ UserInfo.USER.getStoreId();
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

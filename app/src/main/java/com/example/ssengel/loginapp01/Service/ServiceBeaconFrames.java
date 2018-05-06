@@ -13,6 +13,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.ssengel.loginapp01.Activity.LoginActivity;
 import com.example.ssengel.loginapp01.Common.StoreInfo;
+import com.example.ssengel.loginapp01.Common.UserInfo;
 import com.example.ssengel.loginapp01.Constant.ServerURL;
 import com.example.ssengel.loginapp01.Model.BeaconImpl;
 import com.example.ssengel.loginapp01.Model.Notification;
@@ -52,9 +53,9 @@ public class ServiceBeaconFrames {
             beacons.put(beacon);
         }
         JSONObject jsonParam = new JSONObject();
-        jsonParam.put("userId", LoginActivity.USER.getId());
-        jsonParam.put("storeId", LoginActivity.USER.getStoreId());// magaza id si dinamik olarak elde edilmeli
-        jsonParam.put("companId", LoginActivity.USER.getCompanyId());// register da yapilan secim sonucu elde edilmeli
+        jsonParam.put("userId", UserInfo.USER.getId());
+        jsonParam.put("storeId", UserInfo.USER.getStoreId());// magaza id si dinamik olarak elde edilmeli
+        jsonParam.put("companId", UserInfo.USER.getCompanyId());// register da yapilan secim sonucu elde edilmeli
         jsonParam.put("beacons", beacons);
 
         JsonObjectRequest req = new JsonObjectRequest(ServerURL.BEACONFRAMES, jsonParam, new Response.Listener<JSONObject>() {

@@ -1,6 +1,7 @@
 package com.example.ssengel.loginapp01.Activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -11,10 +12,13 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.ssengel.loginapp01.Auth.AuthController;
+import com.example.ssengel.loginapp01.Common.UserInfo;
 import com.example.ssengel.loginapp01.Constant.ServerURL;
 import com.example.ssengel.loginapp01.R;
 import com.example.ssengel.loginapp01.Model.User;
@@ -40,11 +45,11 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private EditText txtUserName;
     private EditText txtPassword;
-    private TextView lnkRegister;
+    private TextView btnRegister;
+    private ProgressBar spinner;
+    private Toolbar toolbar;
 
     private final static String TAG  = LoginActivity.class.getName();
-    public final static User USER = new User();
-
     private RequestQueue requestQueue;
 
 
@@ -53,8 +58,11 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         txtUserName = (EditText) findViewById(R.id.txtUserName);
         txtPassword = (EditText) findViewById(R.id.txtPassword);
-        lnkRegister = (TextView) findViewById(R.id.lnkRegister);
+        btnRegister = (TextView) findViewById(R.id.btnRegister);
         requestQueue = Volley.newRequestQueue(this);
+        spinner = (ProgressBar) findViewById(R.id.progressBar1);
+        toolbar = findViewById(R.id.my_toolbar);
+
     };
 
     private void initListeners(){
@@ -64,7 +72,13 @@ public class LoginActivity extends AppCompatActivity {
                 String userName = txtUserName.getText().toString();
                 String password = txtPassword.getText().toString();
                 try {
-                    checkAccount(userName, password);
+                    if(TextUtils.isEmpty(userName)){
+                        Toast.makeText(getApplicationContext(), "Kullanici adi bos gecilemez !",Toast.LENGTH_SHORT).show();
+                    }else if(TextUtils.isEmpty(password)){
+                        Toast.makeText(getApplicationContext(), "Sifre bos gecilemez !",Toast.LENGTH_SHORT).show();
+                    }else{
+                        checkAccount(userName, password);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -74,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        lnkRegister.setOnClickListener(new View.OnClickListener() {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -92,13 +106,25 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        setSupportActionBar(toolbar);
+
         initVar();
         initListeners();
 
         //checkPermissions();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        txtUserName.setText("");
+        txtPassword.setText("");
+    }
+
+
     // Kullanici Giris Kontrolu
     private void checkAccount(String userName, String password) throws IOException, JSONException {
+        spinner.setVisibility(View.VISIBLE);
 
         JSONObject jsonParam = new JSONObject();
         jsonParam.put("userName",userName);
@@ -111,29 +137,29 @@ public class LoginActivity extends AppCompatActivity {
                 try {
 
                     if (!response.getBoolean("auth")) {
-                        Log.i(TAG, response.toString());
+                        spinner.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), response.getString("message"),Toast.LENGTH_SHORT).show();
                     } else {
-                        //get token
+
                         AuthController.TOKEN = response.getString("token");
                         JSONObject user = response.getJSONObject("user");
-                        USER.setId(user.getString("_id"));
-                        USER.setName(user.getString("name"));
-                        USER.setLastName(user.getString("lastName"));
-                        USER.setUserName(user.getString("userName"));
-                        USER.setEmail(user.getString("email"));
-                        USER.setStoreId("5addc203ab75782870a7cc14");
-                        USER.setCompanyId("5addbc06aa4d52265447025e");
+                        UserInfo.USER.setId(user.getString("_id"));
+                        UserInfo.USER.setName(user.getString("name"));
+                        UserInfo.USER.setLastName(user.getString("lastName"));
+                        UserInfo.USER.setUserName(user.getString("userName"));
+                        UserInfo.USER.setEmail(user.getString("email"));
+                        UserInfo.USER.setStoreId("5addc203ab75782870a7cc14");
+                        UserInfo.USER.setCompanyId("5addbc06aa4d52265447025e");
 
-                        Log.i(TAG, "GIRIS BASARILI..");
-                        Log.i(TAG, "Main 2 ye YONLENDIRILIYOR..");
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         LoginActivity.this.startActivity(intent);
-
+                        spinner.setVisibility(View.GONE);
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    spinner.setVisibility(View.GONE);
                 }
 
 
@@ -141,6 +167,8 @@ public class LoginActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                spinner.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(), "Sunucu Erisim Saglanamadi !",Toast.LENGTH_SHORT).show();
                 Log.e(TAG, error.getMessage());
             }
         });
