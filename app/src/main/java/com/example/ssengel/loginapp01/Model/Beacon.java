@@ -1,6 +1,8 @@
 package com.example.ssengel.loginapp01.Model;
 
 
+import com.example.ssengel.loginapp01.Helper.RssiFilter;
+
 public interface Beacon {
     String getMacAddress();
     void setBeaconName(String name);

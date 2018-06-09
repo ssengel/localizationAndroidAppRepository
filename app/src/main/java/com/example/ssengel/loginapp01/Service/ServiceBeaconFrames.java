@@ -1,9 +1,7 @@
 package com.example.ssengel.loginapp01.Service;
 
-import android.accessibilityservice.GestureDescription;
 import android.content.Context;
 import android.support.v4.app.NotificationCompat;
-import android.test.mock.MockApplication;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -11,13 +9,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.ssengel.loginapp01.Activity.LoginActivity;
 import com.example.ssengel.loginapp01.Common.StoreInfo;
 import com.example.ssengel.loginapp01.Common.UserInfo;
 import com.example.ssengel.loginapp01.Constant.ServerURL;
 import com.example.ssengel.loginapp01.Model.BeaconImpl;
 import com.example.ssengel.loginapp01.Model.Notification;
-import com.example.ssengel.loginapp01.Model.NotificationHelper;
+import com.example.ssengel.loginapp01.Helper.NotificationHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;

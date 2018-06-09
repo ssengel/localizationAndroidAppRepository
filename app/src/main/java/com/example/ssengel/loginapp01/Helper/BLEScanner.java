@@ -1,4 +1,4 @@
-package com.example.ssengel.loginapp01.Model;
+package com.example.ssengel.loginapp01.Helper;
 
 
 import android.bluetooth.le.ScanResult;
@@ -13,6 +13,6 @@ public interface BLEScanner {
     void scanLeDevice(String option);
     int getPosition(String adress);
     void addBeacon(ScanResult scanResult);
-    void updatelistRssi();
+    void sendBeaconFrame(int miliSecond);
 
 }

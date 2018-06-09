@@ -1,4 +1,4 @@
-package com.example.ssengel.loginapp01.Model;
+package com.example.ssengel.loginapp01.Helper;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

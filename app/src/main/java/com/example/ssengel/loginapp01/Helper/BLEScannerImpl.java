@@ -1,4 +1,4 @@
-package com.example.ssengel.loginapp01.Model;
+package com.example.ssengel.loginapp01.Helper;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -8,31 +8,16 @@ import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.ssengel.loginapp01.Activity.LoginActivity;
-import com.example.ssengel.loginapp01.Constant.ServerURL;
+import com.example.ssengel.loginapp01.Model.BeaconImpl;
 import com.example.ssengel.loginapp01.Service.ServiceBeaconFrames;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
 
 public class BLEScannerImpl implements BLEScanner {
@@ -156,13 +141,13 @@ public class BLEScannerImpl implements BLEScanner {
 
 
     @Override
-    public void updatelistRssi() {
+    public void sendBeaconFrame(final int miliSecond) {
         new Thread (new Runnable() {
             @Override
             public void run() {
                 while (true){
                     try {
-                        Thread.sleep(1500);
+                        Thread.sleep(miliSecond);
                         if(lstScanResults.size() > 0){
                             Collections.sort(lstScanResults,com);
                             serviceBeaconFrames.postBeaconFrame(lstScanResults);

@@ -18,7 +18,9 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="BLE v6.0" />
+        app:title="BLE v6.0" >
+
+    </android.support.v7.widget.Toolbar>
 
     <ImageView
         android:layout_marginTop="20dp"

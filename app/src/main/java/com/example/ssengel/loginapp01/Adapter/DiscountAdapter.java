@@ -6,12 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ssengel.loginapp01.DiscountDetailActivity;
-import com.example.ssengel.loginapp01.Model.GeneralDiscount;
+import com.example.ssengel.loginapp01.Activity.DiscountDetailActivity;
+import com.example.ssengel.loginapp01.Model.Discount;
 import com.example.ssengel.loginapp01.R;
 
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
 public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.MyViewHolder> {
 
     private Context context;
-    private List<GeneralDiscount> generalDiscountList;
+    private List<Discount> discountList;
 
 
 
@@ -32,14 +31,15 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.MyView
         public TextView txtTag;
         public TextView txtPrice;
         public TextView txtDiscountRate;
-        private RelativeLayout main;
+        public ImageView imgView;
 
         public MyViewHolder(View view) {
             super(view);
             txtTag = (TextView) view.findViewById(R.id.txtTag);
             txtPrice = (TextView) view.findViewById(R.id.txtPrice);
             txtDiscountRate = (TextView) view.findViewById(R.id.txtDiscountRate);
-            //main = view.findViewById(R.id.main);
+            imgView = (ImageView) view.findViewById(R.id.imgView);
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -52,9 +52,9 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.MyView
         }
     }
 
-    public DiscountAdapter(Context context, List<GeneralDiscount> generalDiscountList){
+    public DiscountAdapter(Context context, List<Discount> discountList){
         this.context = context;
-        this.generalDiscountList = generalDiscountList;
+        this.discountList = discountList;
     }
 
     @Override
@@ -66,10 +66,18 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        GeneralDiscount discount = generalDiscountList.get(position);
+        Discount discount = discountList.get(position);
         holder.txtTag.setText(discount.getTag());
         holder.txtDiscountRate.setText("Indirim Orani: " + discount.getDiscountRate());
         holder.txtPrice.setText("Urun Fiyati: " + discount.getPrice());
+
+        if(discount.getImagePath().equals("indirim01")){
+            holder.imgView.setImageResource(R.drawable.indirim01);
+        }else if(discount.getImagePath().equals("indirim02")){
+            holder.imgView.setImageResource(R.drawable.indirim02);
+        }else{
+            holder.imgView.setImageResource(R.drawable.indirim03);
+        }
         //discountId sini listeden temin et.
 
         holder.discountId = discount.getId();
@@ -78,6 +86,6 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return generalDiscountList.size();
+        return discountList.size();
     }
 }

@@ -15,14 +15,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.ssengel.loginapp01.Adapter.DiscountAdapter;
 import com.example.ssengel.loginapp01.Common.StoreInfo;
-import com.example.ssengel.loginapp01.Model.BLEScannerImpl;
-import com.example.ssengel.loginapp01.Model.GeneralDiscount;
+import com.example.ssengel.loginapp01.Helper.BLEScannerImpl;
+import com.example.ssengel.loginapp01.Model.Discount;
 import com.example.ssengel.loginapp01.R;
 import com.example.ssengel.loginapp01.Service.ServiceNotifications;
 
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity
 
     private RecyclerView recyclerView;
     private DiscountAdapter discountAdapter;
-    private List<GeneralDiscount> discountList;
+    private List<Discount> discountList;
     private BluetoothManager btManager;
     private BLEScannerImpl mBLEScannerImpl;
     private ServiceNotifications serviceNotifications;
@@ -44,8 +43,8 @@ public class MainActivity extends AppCompatActivity
     private void initViews(){
 
         serviceNotifications = new ServiceNotifications(this);
-//        btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-//        mBLEScannerImpl = new BLEScannerImpl(btManager, this);
+        btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBLEScannerImpl = new BLEScannerImpl(btManager, this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGeneralDiscount);
         discountList = new ArrayList<>();
         discountAdapter = new DiscountAdapter(this,discountList);
@@ -56,11 +55,21 @@ public class MainActivity extends AppCompatActivity
         //test amacli
         //api dan genel kampanyalar saglanamali
         for (int i= 1 ;i < 5; i++){
-            GeneralDiscount discount = new GeneralDiscount();
+            Discount discount = new Discount();
             discount.setId("testId");
             discount.setTag("Boyner Magazalarinda Indirim");
             discount.setPrice(50);
             discount.setDiscountRate((i * 6));
+            if(i == 1){
+                discount.setImagePath("indirim01");
+            }else if(i == 2){
+                discount.setImagePath("indirim02");
+            }else if(i == 3){
+                discount.setImagePath("indirim03");
+            }else{
+                discount.setImagePath("indirim01");
+            }
+
             discount.toString();
             discountList.add(discount);
         }
@@ -96,8 +105,8 @@ public class MainActivity extends AppCompatActivity
         //eksik
 
         //Taramayi baslat
-//        mBLEScannerImpl.scanLeDevice("FAST");
-//        mBLEScannerImpl.updatelistRssi();
+        mBLEScannerImpl.scanLeDevice("FAST");
+        mBLEScannerImpl.sendBeaconFrame(1500);
 
     }
 

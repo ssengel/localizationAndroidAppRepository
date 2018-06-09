@@ -4,7 +4,7 @@ package com.example.ssengel.loginapp01.Model;
  * Created by ssengel on 11.04.2018.
  */
 
-public class GeneralDiscount {
+public class Discount {
     private String id;
     private String tag;
     private double price;

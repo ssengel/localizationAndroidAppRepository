@@ -1,5 +1,7 @@
 package com.example.ssengel.loginapp01.Model;
 
+import com.example.ssengel.loginapp01.Helper.RssiFilter;
+
 public class BeaconImpl implements Beacon {
     private String macAddress;
     private String beaconName;
