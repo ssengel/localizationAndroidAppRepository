@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity
     private void initViews(){
 
         serviceNotifications = new ServiceNotifications(this);
-        btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBLEScannerImpl = new BLEScannerImpl(btManager, this);
+        //btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        //mBLEScannerImpl = new BLEScannerImpl(btManager, this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGeneralDiscount);
         discountList = new ArrayList<>();
         discountAdapter = new DiscountAdapter(this,discountList);
@@ -105,8 +105,8 @@ public class MainActivity extends AppCompatActivity
         //eksik
 
         //Taramayi baslat
-        mBLEScannerImpl.scanLeDevice("FAST");
-        mBLEScannerImpl.sendBeaconFrame(1500);
+        //mBLEScannerImpl.scanLeDevice("FAST");
+        //mBLEScannerImpl.sendBeaconFrame(1500);
 
     }
 

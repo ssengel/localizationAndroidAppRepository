@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void initVar(){
-        btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+      //  btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         txtUserName = (EditText) findViewById(R.id.txtUserName);
         txtPassword = (EditText) findViewById(R.id.txtPassword);
@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         initVar();
         initListeners();
 
-        checkPermissions();
+        //checkPermissions();
     }
 
     @Override
